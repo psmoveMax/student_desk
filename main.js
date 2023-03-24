@@ -163,21 +163,27 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not') {
     }
   } else if (option == 'filter') {
     console.log('test');
-    if (mass_regex['fio'] != undefined) {
-      let is_fio = studentsArray[i].fio.search(mass_regex['fio']);
-    }
-    if (mass_regex['fak'] != undefined) {
-      let is_fak = studentsArray[i].fakultet.search(mass_regex['fak']);
-    }
+    var is_fio = -1;
+    var is_fak = -1;
+
 
     for (let i = 0; i < studentsArray.length; i++) {
-      //  console.log(studentsArray[i].fakultet, mass_regex['fak']);
-      //   console.log(is_fio, is_fak);
+      if (mass_regex['fio'] != undefined) {
+        is_fio = studentsArray[i].fio.search(mass_regex['fio']);
+      }
+      if (mass_regex['fak'] != undefined) {
+        is_fak = studentsArray[i].fakultet.search(mass_regex['fak']);
+      }
+
+
+      console.log('test');
       if (is_fio != -1) {
         getStudentItem(studentsList[i]);
       }
 
-
+      if (mass_regex['fak'] == undefined && mass_regex['fio'] == undefined) {
+        getStudentItem(studentsList[i]);
+      }
 
       /*
  */
