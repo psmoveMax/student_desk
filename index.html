@@ -47,8 +47,18 @@
         <button type="button" id="btn_form_close" class="btn btn-warning">Закрыть</button>
       </form>
     </div>
-
-
+    <h5>Фильтрация</h5>
+    <form id="form_filter">
+      <input type="text" class="form-control fa" id="search_fio" placeholder="Введите ФИО &#128269"
+        aria-describedby="basic-addon1">
+      <input type="text" class="form-control fa" id="search_fakultet" placeholder="Введите факультет &#128269"
+        aria-describedby="basic-addon1">
+      <input type="number" class="form-control fa " id="search_year_start" placeholder="Год начала &#128269"
+        aria-describedby="basic-addon1">
+      <input type="number" class="form-control fa" id="search_year_end" placeholder=" Год окончания &#128269"
+        aria-describedby="basic-addon1">
+    </form>
+    <hr>
     <table class="table  table-bordered" id="table_main">
       <thead>
         <tr>
@@ -60,22 +70,15 @@
       </thead>
       <tbody>
         <tr>
-          <th> <input type="text" class="form-control fa" placeholder="Введите ФИО &#128269"
-              aria-describedby="basic-addon1"></th>
-          <th> <input type="text" class="form-control fa" placeholder="Введите факультет &#128269"
-              aria-describedby="basic-addon1"></th>
-          <th> <input type="number" class="form-control fa " placeholder="Год начала &#128269"
-              aria-describedby="basic-addon1"></th>
-          <th> <input type="number" class="form-control fa" placeholder="Год окончания &#128269"
-              aria-describedby="basic-addon1"></th>
         </tr>
-
       </tbody>
     </table>
+
   </div>
 </body>
+<!--
 <footer class="footer">
   0.5<a target="_blank" href="https://github.com/psmoveMax/student_desk">GitHub</a>
-</footer>
+</footer> -->
 
 </html>
