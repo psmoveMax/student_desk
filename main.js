@@ -67,68 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
-  /*
-    document.querySelector("#form_filter").addEventListener("input", () => {
-      let mass = Array();
-      let value_fak = document.querySelector('#search_fakultet').value.trim();
-      let value_start = document.querySelector('#search_year_start').value.trim();
-      let value_end = document.querySelector('#search_year_end').value.trim();
-  
-      let vision_mass = Array();
-      let table_data = document.querySelector('#table_data').children;
-  
-  
-      //Узнаем что на экране
-      for (let i = 1; i < table_data.length; i++) {
-        vision_mass.push(table_data[i].children[0].innerText);
-      }
-  
-  
-      if (value_fak != '') {
-        mass['fak'] = new RegExp(`${value_fak}`, 'i');
-      }
-  
-      if (value_start != '') {
-        mass['start'] = new RegExp(`${value_start}`);
-      }
-  
-      if (value_end != '') {
-        mass['end'] = new RegExp(`${value_end}`);
-      }
-  
-      renderStudentsTable(studentsList, mass, 'filter', vision_mass);
-  
-    });
-  */
-
-  document.querySelector("#sort_fio").addEventListener("click", () => {
-    let mass = Array();
-    let vision_mass = Array();
-
-    let table_data = document.querySelector('#table_data').children;
-
-    //Узнаем что на экране
-    for (let i = 1; i < table_data.length; i++) {
-      vision_mass.push(table_data[i].children[0].innerText);
-    }
-    renderStudentsTable(studentsList, mass, 'sort_fio', vision_mass);
-
-  });
 
 
-  document.querySelector("#sort_fak").addEventListener("click", () => {
-    let mass = Array();
-    let vision_mass = Array();
 
-    let table_data = document.querySelector('#table_data').children;
 
-    //Узнаем что на экране
-    for (let i = 1; i < table_data.length; i++) {
-      vision_mass.push(table_data[i].children[0].innerText);
-    }
-    renderStudentsTable(studentsList, mass, 'sort_fak', vision_mass);
 
-  });
 });
 
 // Этап 1. В HTML файле создайте верстку элементов, которые будут статичны(неизменны).
@@ -176,7 +119,7 @@ function getStudentItem(studentObj) {
 
 // Этап 4. Создайте функцию отрисовки всех студентов. Аргументом функции будет массив студентов.Функция должна использовать ранее созданную функцию создания одной записи для студента.Цикл поможет вам создать список студентов.Каждый раз при изменении списка студента вы будете вызывать эту функцию для отрисовки таблицы.
 
-function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_mass) {
+function renderStudentsTable(studentsArray) {
   let count_current = document.querySelector('#table_main')['tBodies'][0].childElementCount;
   if (count_current != 1) {
     while (count_current != 1) {
@@ -185,154 +128,9 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_m
     }
   }
 
-  function find(studentsList, vision_mass) {
-    for (var i = 0; i < studentsList.length; i++)
-      if (studentsList[i]['fio'] == vision_mass) {
-        return i;
-      }
-
+  for (let i = 0; i < studentsArray.length; i++) {
+    getStudentItem(studentsList[i]);
   }
-  /*
-    function find_reverse(studentsList, vision_mass) {
-      for (var i = 0; i < studentsList.length; i++)
-        if (studentsList[i]['fio'] == vision_mass) {
-          return i;
-        }
-  
-    }
-  
-  */
-
-  if (option == 'not') {
-    for (let i = 0; i < studentsArray.length; i++) {
-      getStudentItem(studentsList[i]);
-    }
-  } else if (option == 'filter') {
-
-    let is_fio = -1;
-    let is_fak = -1;
-
-    let current_mass = Array();
-
-    const regex_year_start = /\d{4}/;
-    const regex_end_year = /\d{4}-(\d{4})/;
-
-    for (let i = 0; i < studentsArray.length; i++) {
-
-
-      if (mass_regex['fio'] != undefined) {
-        is_fio = studentsArray[i].fio.search(mass_regex['fio']);
-      }
-      if (mass_regex['fak'] != undefined) {
-        is_fak = studentsArray[i].fakultet.search(mass_regex['fak']);
-      }
-
-      let match_start = null;
-      let match_end = null;
-
-      if (mass_regex['start'] != undefined) {
-        is_start = studentsArray[i].learn_start.match(regex_year_start);
-        if (is_start != null) {
-          match_start = is_start[0].match(mass_regex['start']);
-        }
-
-      }
-      if (mass_regex['end'] != undefined) {
-        is_end = studentsArray[i].learn_start.match(regex_end_year);
-
-
-        if (is_end != null) {
-          match_end = is_end[1].match(mass_regex['end']);
-        }
-      }
-
-
-
-
-      //ФИО
-      if (is_fio != -1) {
-        if (vision_mass.includes(studentsArray[i].fio) == true) {
-          if (current_mass.includes(studentsArray[i].fio) == false) {
-            current_mass.push(studentsList[i].fio);
-            getStudentItem(studentsList[i]);
-          }
-
-        }
-      }
-
-
-
-      //Факультет
-      if (is_fak != -1) {
-        if (vision_mass.includes(studentsArray[i].fio) == true) {
-          if (current_mass.includes(studentsArray[i].fio) == false) {
-            current_mass.push(studentsList[i].fio);
-            getStudentItem(studentsList[i]);
-          }
-        }
-      }
-
-      //Год начала 
-      if (match_start != null) {
-        if (match_start[0] != '') {
-          if (vision_mass.includes(studentsArray[i].fio) == true) {
-            if (current_mass.includes(studentsArray[i].fio) == false) {
-              getStudentItem(studentsList[i]);
-            }
-          }
-        }
-      }
-
-      //Год окончания
-      if (match_end != null) {
-        if (match_end[0] != '') {
-          if (vision_mass.includes(studentsArray[i].fio) == true) {
-            if (current_mass.includes(studentsArray[i].fio) == false) {
-              getStudentItem(studentsList[i]);
-            }
-          }
-        }
-      }
-
-
-
-      if (mass_regex['fak'] == undefined && mass_regex['fio'] == undefined && mass_regex['start'] == undefined && mass_regex['end'] == undefined) {
-
-        getStudentItem(studentsList[i]);
-      }
-
-
-    }
-
-  } else if (option == 'sort_fio') {
-    if (document.querySelector('#sort_fio_activity').innerText == 'ᐁ') {
-
-      vision_mass.sort();
-      for (let i = 0; i < vision_mass.length; i++) {
-        let finder = find(studentsArray, vision_mass[i]);
-        getStudentItem(studentsList[finder]);
-      }
-
-      document.querySelector('#sort_fio_activity').innerText = '▼';
-    } else {
-
-      for (let i = 0; i < vision_mass.length; i++) {
-        let finder = find(vision_mass, studentsArray[i]);
-        console.log(finder);
-        console.log(studentsList);
-        console.log(vision_mass);
-        getStudentItem(studentsList[finder]);
-      }
-      document.querySelector('#sort_fio_activity').innerText = 'ᐁ';
-    }
-
-  } else if (option == 'sort_fak') {
-    for (let i = 0; i < studentsArray.length; i++) {
-      getStudentItem(studentsList[i]);
-    }
-    console.log('заглушка');
-  }
-
 
 }
 
