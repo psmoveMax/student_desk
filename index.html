@@ -49,14 +49,14 @@
     </div>
     <h5>Фильтрация</h5>
     <form id="form_filter">
-      <input type="text" class="form-control fa" id="search_fio" placeholder="Введите ФИО &#128269"
-        aria-describedby="basic-addon1">
-      <input type="text" class="form-control fa" id="search_fakultet" placeholder="Введите факультет &#128269"
-        aria-describedby="basic-addon1">
-      <input type="number" class="form-control fa " id="search_year_start" placeholder="Год начала обучения &#128269"
-        aria-describedby="basic-addon1">
-      <input type="number" class="form-control fa" id="search_year_end" placeholder=" Год окончания обучения &#128269"
-        aria-describedby="basic-addon1">
+      <input type="text" class="form-control fa" id="search_fio" onkeyup="search_func()"
+        placeholder="Введите ФИО &#128269" aria-describedby="basic-addon1">
+      <input type="text" class="form-control fa" id="search_fakultet" onkeyup="search_func()"
+        placeholder="Введите факультет &#128269" aria-describedby="basic-addon1">
+      <input type="number" class="form-control fa " id="search_year_start" onkeyup="search_func()"
+        placeholder="Год начала обучения &#128269" aria-describedby="basic-addon1">
+      <input type="number" class="form-control fa" id="search_year_end" onkeyup="search_func()"
+        placeholder=" Год окончания обучения &#128269" aria-describedby="basic-addon1">
     </form>
     <hr>
     <table class="table  table-bordered" id="table_main">
@@ -77,6 +77,73 @@
     </table>
 
   </div>
+
+
+  <script>
+
+
+    function search_func() {
+      let fio_input, fak_input, start_input, filter, table, tr, td, i;
+      fio_input = document.getElementById("search_fio");
+      filter_fio = fio_input.value.toUpperCase();
+
+      fak_input = document.getElementById("search_fakultet");
+      filter_fak = fak_input.value.toUpperCase();
+
+
+      start_input = document.getElementById("search_year_start");
+      filter_start = start_input.value;
+
+      end_input = document.getElementById("search_year_end");
+      filter_end = end_input.value;
+      const regular = /(\d{4})/gm;
+
+      table = document.getElementById("table_main");
+      tr = table.getElementsByTagName("tr");
+      for (i = 1; i < tr.length; i++) {
+        th_fio = tr[i].getElementsByTagName("th")[0];
+        td_fak = tr[i].getElementsByTagName("td")[0];
+        td_learn = tr[i].getElementsByTagName("td")[2];
+
+
+
+        if (th_fio && td_fak && td_learn) {
+          if (td_fak.innerHTML.toUpperCase().indexOf(filter_fak) > -1 &&
+            th_fio.innerHTML.toUpperCase().indexOf(filter_fio) > -1) {
+            if (filter_start == '' && filter_end == '') {
+              tr[i].style.display = "";
+            } else {
+              if (td_learn.innerHTML.match(regular)) {
+                if (filter_start != '' && filter_end != '') {
+                  if (filter_start == td_learn.innerHTML.match(regular)[0] &&
+                    filter_end == td_learn.innerHTML.match(regular)[1]) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                } else {
+                  if (filter_start == td_learn.innerHTML.match(regular)[0] ||
+                    filter_end == td_learn.innerHTML.match(regular)[1]) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+
+    }
+
+
+
+  </script>
 </body>
 <!--
 <footer class="footer">

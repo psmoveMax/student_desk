@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
   renderStudentsTable(studentsList);
 
   // Этап 5. К форме добавления студента добавьте слушатель события отправки формы, в котором будет проверка введенных данных.Если проверка пройдет успешно, добавляйте объект с данными студентов в массив студентов и запустите функцию отрисовки таблицы студентов, созданную на этапе 4.
@@ -65,43 +67,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
-
-  document.querySelector("#form_filter").addEventListener("input", () => {
-    let mass = Array();
-    let value_fio = document.querySelector('#search_fio').value.trim();
-    let value_fak = document.querySelector('#search_fakultet').value.trim();
-    let value_start = document.querySelector('#search_year_start').value.trim();
-    let value_end = document.querySelector('#search_year_end').value.trim();
-
-    let vision_mass = Array();
-    let table_data = document.querySelector('#table_data').children;
-
-
-    //Узнаем что на экране
-    for (let i = 1; i < table_data.length; i++) {
-      vision_mass.push(table_data[i].children[0].innerText);
-    }
-
-
-    if (value_fio != '') {
-      mass['fio'] = new RegExp(`${value_fio}`, 'i');
-    }
-    if (value_fak != '') {
-      mass['fak'] = new RegExp(`${value_fak}`, 'i');
-    }
-
-    if (value_start != '') {
-      mass['start'] = new RegExp(`${value_start}`);
-    }
-
-    if (value_end != '') {
-      mass['end'] = new RegExp(`${value_end}`);
-    }
-
-    renderStudentsTable(studentsList, mass, 'filter', vision_mass);
-
-  });
-
+  /*
+    document.querySelector("#form_filter").addEventListener("input", () => {
+      let mass = Array();
+      let value_fak = document.querySelector('#search_fakultet').value.trim();
+      let value_start = document.querySelector('#search_year_start').value.trim();
+      let value_end = document.querySelector('#search_year_end').value.trim();
+  
+      let vision_mass = Array();
+      let table_data = document.querySelector('#table_data').children;
+  
+  
+      //Узнаем что на экране
+      for (let i = 1; i < table_data.length; i++) {
+        vision_mass.push(table_data[i].children[0].innerText);
+      }
+  
+  
+      if (value_fak != '') {
+        mass['fak'] = new RegExp(`${value_fak}`, 'i');
+      }
+  
+      if (value_start != '') {
+        mass['start'] = new RegExp(`${value_start}`);
+      }
+  
+      if (value_end != '') {
+        mass['end'] = new RegExp(`${value_end}`);
+      }
+  
+      renderStudentsTable(studentsList, mass, 'filter', vision_mass);
+  
+    });
+  */
 
   document.querySelector("#sort_fio").addEventListener("click", () => {
     let mass = Array();
@@ -187,6 +185,24 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_m
     }
   }
 
+  function find(studentsList, vision_mass) {
+    for (var i = 0; i < studentsList.length; i++)
+      if (studentsList[i]['fio'] == vision_mass) {
+        return i;
+      }
+
+  }
+  /*
+    function find_reverse(studentsList, vision_mass) {
+      for (var i = 0; i < studentsList.length; i++)
+        if (studentsList[i]['fio'] == vision_mass) {
+          return i;
+        }
+  
+    }
+  
+  */
+
   if (option == 'not') {
     for (let i = 0; i < studentsArray.length; i++) {
       getStudentItem(studentsList[i]);
@@ -244,6 +260,8 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_m
         }
       }
 
+
+
       //Факультет
       if (is_fak != -1) {
         if (vision_mass.includes(studentsArray[i].fio) == true) {
@@ -289,13 +307,6 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_m
   } else if (option == 'sort_fio') {
     if (document.querySelector('#sort_fio_activity').innerText == 'ᐁ') {
 
-      function find(studentsList, vision_mass) {
-        for (var i = 0; i < studentsList.length; i++)
-          if (studentsList[i]['fio'] == vision_mass)
-            return i;
-      }
-
-
       vision_mass.sort();
       for (let i = 0; i < vision_mass.length; i++) {
         let finder = find(studentsArray, vision_mass[i]);
@@ -304,8 +315,13 @@ function renderStudentsTable(studentsArray, mass_regex, option = 'not', vision_m
 
       document.querySelector('#sort_fio_activity').innerText = '▼';
     } else {
-      for (let i = 0; i < studentsArray.length; i++) {
-        getStudentItem(studentsList[i]);
+
+      for (let i = 0; i < vision_mass.length; i++) {
+        let finder = find(vision_mass, studentsArray[i]);
+        console.log(finder);
+        console.log(studentsList);
+        console.log(vision_mass);
+        getStudentItem(studentsList[finder]);
       }
       document.querySelector('#sort_fio_activity').innerText = 'ᐁ';
     }
