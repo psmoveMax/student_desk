@@ -29,12 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let date_student = new Date(date_birth);
     date_learn = new Date(date_learn);
 
-    console.log(date_student.getFullYear());
     //Валидация даты рождения
     if (date_student.getFullYear() >= 1900) {
       //Валидация года обучения
       if ((date_learn.getFullYear() >= 2000 && date_learn.getFullYear() <= date_now.getFullYear()) && (date_now.getFullYear() > date_learn.getFullYear())) {
-        console.log('valid');
         let year = date_now.getFullYear() - date_student.getFullYear();
 
         //Сколько лет студенту
@@ -58,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         studentsList.push({ fio: fio, fakultet: fakultet, date_birth: `${date_student.toLocaleDateString('ru-RU')} (${year} лет)`, learn_start: ` ${learn_path}` });
         renderStudentsTable(studentsList);
         e.target.reset();
+        alert('Добавлен новый студент');
       } else {
         alert('Год начала обучения должен начинаться с 2000 года и не быть больше текущего года');
       }
@@ -138,8 +137,6 @@ function renderStudentsTable(studentsArray) {
 function sort_func(sort_name) {
   let id;
 
-
-
   const regular_birth = /(\d{2}).(\d{2}).(\d{4})/;
   const regular_learn = /(\d{4})-(\d{4})/gm;
   switch (sort_name) {
@@ -163,7 +160,7 @@ function sort_func(sort_name) {
   for (let i = 0; i < document.querySelector('#header_table').children.length; i++) {
     if (document.querySelector('#header_table').children[i].children[0].innerHTML == '▼') {
       if (id != document.querySelector('#header_table').children[i].id) {
-        renderStudentsTable(studentsList);
+        //renderStudentsTable(studentsList);
         document.querySelector('#header_table').children[i].children[0].innerHTML = 'ᐁ';
       }
     }
@@ -200,11 +197,13 @@ function sort_func(sort_name) {
         document.getElementById("search_fakultet").value == '' &&
         document.getElementById("search_year_start").value == '' &&
         document.getElementById("search_year_end").value == '') {
-        console.log('ye');
         renderStudentsTable(studentsList);
         document.querySelector('#sort_fio_activity').innerHTML = 'ᐁ';
       } else {
-        console.log(studentsList);
+        document.getElementById("search_fio").value = '';
+        document.getElementById("search_fakultet").value = '';
+        document.getElementById("search_year_start").value = '';
+        document.getElementById("search_year_end").value = '';
         renderStudentsTable(studentsList);
         document.querySelector('#sort_fio_activity').innerHTML = 'ᐁ';
       }
@@ -240,11 +239,13 @@ function sort_func(sort_name) {
         document.getElementById("search_fakultet").value == '' &&
         document.getElementById("search_year_start").value == '' &&
         document.getElementById("search_year_end").value == '') {
-        console.log('ye');
         renderStudentsTable(studentsList);
         document.querySelector('#sort_fak_activity').innerHTML = 'ᐁ';
       } else {
-        console.log(studentsList);
+        document.getElementById("search_fio").value = '';
+        document.getElementById("search_fakultet").value = '';
+        document.getElementById("search_year_start").value = '';
+        document.getElementById("search_year_end").value = '';
         renderStudentsTable(studentsList);
         document.querySelector('#sort_fak_activity').innerHTML = 'ᐁ';
       }
@@ -284,11 +285,13 @@ function sort_func(sort_name) {
         document.getElementById("search_fakultet").value == '' &&
         document.getElementById("search_year_start").value == '' &&
         document.getElementById("search_year_end").value == '') {
-        console.log('ye');
         renderStudentsTable(studentsList);
         document.querySelector('#sort_birth_activity').innerHTML = 'ᐁ';
       } else {
-        console.log(studentsList);
+        document.getElementById("search_fio").value = '';
+        document.getElementById("search_fakultet").value = '';
+        document.getElementById("search_year_start").value = '';
+        document.getElementById("search_year_end").value = '';
         renderStudentsTable(studentsList);
         document.querySelector('#sort_birth_activity').innerHTML = 'ᐁ';
       }
@@ -334,11 +337,13 @@ function sort_func(sort_name) {
         document.getElementById("search_fakultet").value == '' &&
         document.getElementById("search_year_start").value == '' &&
         document.getElementById("search_year_end").value == '') {
-        console.log(studentsList);
         renderStudentsTable(studentsList);
         document.querySelector('#sort_learn_activity').innerHTML = 'ᐁ';
       } else {
-        console.log(studentsList);
+        document.getElementById("search_fio").value = '';
+        document.getElementById("search_fakultet").value = '';
+        document.getElementById("search_year_start").value = '';
+        document.getElementById("search_year_end").value = '';
         renderStudentsTable(studentsList);
         document.querySelector('#sort_learn_activity').innerHTML = 'ᐁ';
       }
