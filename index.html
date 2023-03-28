@@ -61,13 +61,15 @@
     <hr>
     <table class="table  table-bordered" id="table_main">
       <thead>
-        <tr>
+        <tr id="header_table">
           <th scope="col" id="sort_fio" onclick="sort_func('fio')">ФИО <i id="sort_fio_activity"
+              style="font-size: 15px; font-style: normal;">&#5121;</i></th>
+          <th scope="col" id="sort_fak" onclick="sort_func('fakultet')">Факультет <i id="sort_fak_activity"
               style="font-size: 15px;font-style: normal;">&#5121;</i></th>
-          <th scope="col" id="sort_fak">Факультет <i id="sort_fak_activity"
+          <th scope="col" id="sort_birth" onclick="sort_func('birth')">Дата рождения <i id="sort_birth_activity"
               style="font-size: 15px;font-style: normal;">&#5121;</i></th>
-          <th scope="col" id="sort_birth">Дата рождения <i class="fas fa-chevron-down fa_sort"></i></th>
-          <th scope="col" id="sort_learn">Годы обучения <i class="fas fa-chevron-down fa_sort"></i></th>
+          <th scope="col" id="sort_learn" onclick="sort_func('learn')">Годы обучения <i id="sort_learn_activity"
+              style="font-size: 15px;font-style: normal;">&#5121;</i></th>
         </tr>
       </thead>
       <tbody id="table_data">
@@ -79,107 +81,7 @@
   </div>
 
 
-  <script>
 
-    function sort_func(sort_name) {
-      var table, rows, switching, i, x, y, shouldSwitch;
-      table = document.getElementById("table_main");
-      switching = true;
-      /*Make a loop that will continue until
-      no switching has been done:*/
-      while (switching) {
-        //start by saying: no switching is done:
-        switching = false;
-        rows = table.getElementsByTagName("TR");
-        /*Loop through all table rows (except the
-        first, which contains table headers):*/
-        for (i = 1; i < (rows.length - 1); i++) {
-          //start by saying there should be no switching:
-          shouldSwitch = false;
-          /*Get the two elements you want to compare,
-          one from current row and one from the next:*/
-          x = rows[i].getElementsByTagName("TH")[0];
-          y = rows[i + 1].getElementsByTagName("TH")[0];
-          //check if the two rows should switch place:
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            //if so, mark as a switch and break the loop:
-            shouldSwitch = true;
-            break;
-          }
-        }
-        if (shouldSwitch) {
-          /*If a switch has been marked, make the switch
-          and mark that a switch has been done:*/
-          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-          switching = true;
-        }
-      }
-
-
-    }
-
-    function search_func() {
-      let fio_input, fak_input, start_input, filter, table, tr, td, i;
-      fio_input = document.getElementById("search_fio");
-      filter_fio = fio_input.value.toUpperCase();
-
-      fak_input = document.getElementById("search_fakultet");
-      filter_fak = fak_input.value.toUpperCase();
-
-
-      start_input = document.getElementById("search_year_start");
-      filter_start = start_input.value;
-
-      end_input = document.getElementById("search_year_end");
-      filter_end = end_input.value;
-      const regular = /(\d{4})/gm;
-
-      table = document.getElementById("table_main");
-      tr = table.getElementsByTagName("tr");
-      for (i = 1; i < tr.length; i++) {
-        th_fio = tr[i].getElementsByTagName("th")[0];
-        td_fak = tr[i].getElementsByTagName("td")[0];
-        td_learn = tr[i].getElementsByTagName("td")[2];
-
-
-
-        if (th_fio && td_fak && td_learn) {
-          if (td_fak.innerHTML.toUpperCase().indexOf(filter_fak) > -1 &&
-            th_fio.innerHTML.toUpperCase().indexOf(filter_fio) > -1) {
-            if (filter_start == '' && filter_end == '') {
-              tr[i].style.display = "";
-            } else {
-              if (td_learn.innerHTML.match(regular)) {
-                if (filter_start != '' && filter_end != '') {
-                  if (filter_start == td_learn.innerHTML.match(regular)[0] &&
-                    filter_end == td_learn.innerHTML.match(regular)[1]) {
-                    tr[i].style.display = "";
-                  } else {
-                    tr[i].style.display = "none";
-                  }
-                } else {
-                  if (filter_start == td_learn.innerHTML.match(regular)[0] ||
-                    filter_end == td_learn.innerHTML.match(regular)[1]) {
-                    tr[i].style.display = "";
-                  } else {
-                    tr[i].style.display = "none";
-                  }
-                }
-              } else {
-                tr[i].style.display = "none";
-              }
-            }
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
-      }
-
-    }
-
-
-
-  </script>
 </body>
 <!--
 <footer class="footer">

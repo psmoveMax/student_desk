@@ -87,7 +87,6 @@ const studentsList = [
   // Добавьте сюда объекты студентов
 ];
 
-console.log(studentsList);
 // Этап 3. Создайте функцию вывода одного студента в таблицу, по аналогии с тем, как вы делали вывод одного дела в модуле 8. Функция должна вернуть html элемент с информацией и пользователе.У функции должен быть один аргумент - объект студента.
 
 function getStudentItem(studentObj) {
@@ -121,6 +120,7 @@ function getStudentItem(studentObj) {
 
 function renderStudentsTable(studentsArray) {
   let count_current = document.querySelector('#table_main')['tBodies'][0].childElementCount;
+
   if (count_current != 1) {
     while (count_current != 1) {
       document.querySelector('#table_main')['tBodies'][0].children[count_current - 1].remove();
@@ -129,11 +129,286 @@ function renderStudentsTable(studentsArray) {
   }
 
   for (let i = 0; i < studentsArray.length; i++) {
-    getStudentItem(studentsList[i]);
+    getStudentItem(studentsArray[i]);
   }
 
 }
 
 // Этап 5. Создайте функцию сортировки массива студентов и добавьте события кликов на соответствующие колонки.
+function sort_func(sort_name) {
+  let id;
+
+
+
+  const regular_birth = /(\d{2}).(\d{2}).(\d{4})/;
+  const regular_learn = /(\d{4})-(\d{4})/gm;
+  switch (sort_name) {
+    case 'fio':
+      id = 'sort_fio';
+      break;
+    case 'fakultet':
+      id = 'sort_fak';
+      break;
+    case 'birth':
+      id = 'sort_birth';
+      break;
+    case 'learn':
+      id = 'sort_learn';
+      break;
+  }
+
+
+
+
+  for (let i = 0; i < document.querySelector('#header_table').children.length; i++) {
+    if (document.querySelector('#header_table').children[i].children[0].innerHTML == '▼') {
+      if (id != document.querySelector('#header_table').children[i].id) {
+        renderStudentsTable(studentsList);
+        document.querySelector('#header_table').children[i].children[0].innerHTML = 'ᐁ';
+      }
+    }
+  }
+
+  if (sort_name == 'fio') {
+    if (document.querySelector('#sort_fio_activity').innerHTML == 'ᐁ') {
+      let table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("table_main");
+      switching = true;
+
+      while (switching) {
+
+        switching = false;
+        rows = table.getElementsByTagName("TR");
+
+        for (i = 2; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TH")[0];
+          y = rows[i + 1].getElementsByTagName("TH")[0];
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+      document.querySelector('#sort_fio_activity').innerHTML = '▼'
+    } else {
+      if (document.getElementById("search_fio").value == '' &&
+        document.getElementById("search_fakultet").value == '' &&
+        document.getElementById("search_year_start").value == '' &&
+        document.getElementById("search_year_end").value == '') {
+        console.log('ye');
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_fio_activity').innerHTML = 'ᐁ';
+      } else {
+        console.log(studentsList);
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_fio_activity').innerHTML = 'ᐁ';
+      }
+    }
+  } else if (sort_name == 'fakultet') {
+    if (document.querySelector('#sort_fak_activity').innerHTML == 'ᐁ') {
+      let table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("table_main");
+      switching = true;
+
+      while (switching) {
+
+        switching = false;
+        rows = table.getElementsByTagName("TR");
+
+        for (i = 2; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+      document.querySelector('#sort_fak_activity').innerHTML = '▼'
+    } else {
+      if (document.getElementById("search_fio").value == '' &&
+        document.getElementById("search_fakultet").value == '' &&
+        document.getElementById("search_year_start").value == '' &&
+        document.getElementById("search_year_end").value == '') {
+        console.log('ye');
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_fak_activity').innerHTML = 'ᐁ';
+      } else {
+        console.log(studentsList);
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_fak_activity').innerHTML = 'ᐁ';
+      }
+    }
+  } else if (sort_name == 'birth') {
+
+    if (document.querySelector('#sort_birth_activity').innerHTML == 'ᐁ') {
+      let table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("table_main");
+      switching = true;
+
+      while (switching) {
+
+        switching = false;
+        rows = table.getElementsByTagName("TR");
+
+        for (i = 2; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[1];
+          y = rows[i + 1].getElementsByTagName("TD")[1];
+          let xDate = new Date(`${x.innerHTML.match(regular_birth)[2]},${x.innerHTML.match(regular_birth)[1]},${x.innerHTML.match(regular_birth)[3]}`).getTime();
+          let yDate = new Date(`${y.innerHTML.match(regular_birth)[2]},${y.innerHTML.match(regular_birth)[1]},${y.innerHTML.match(regular_birth)[3]}`).getTime();
+
+          if (xDate > yDate) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+      document.querySelector('#sort_birth_activity').innerHTML = '▼'
+    } else {
+      if (document.getElementById("search_fio").value == '' &&
+        document.getElementById("search_fakultet").value == '' &&
+        document.getElementById("search_year_start").value == '' &&
+        document.getElementById("search_year_end").value == '') {
+        console.log('ye');
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_birth_activity').innerHTML = 'ᐁ';
+      } else {
+        console.log(studentsList);
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_birth_activity').innerHTML = 'ᐁ';
+      }
+
+
+    }
+  } else if (sort_name == 'learn') {
+    if (document.querySelector('#sort_learn_activity').innerHTML == 'ᐁ') {
+      let table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("table_main");
+      switching = true;
+
+      while (switching) {
+
+        switching = false;
+        rows = table.getElementsByTagName("TR");
+
+        for (i = 2; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[2];
+          y = rows[i + 1].getElementsByTagName("TD")[2];
+          let xDate = x.innerHTML.match(regular_learn);
+          let yDate = y.innerHTML.match(regular_learn);
+          if (xDate != null && yDate != null) {
+            if (xDate > yDate) {
+              shouldSwitch = true;
+              break;
+            }
+          } else if (xDate != null && yDate == null) {
+            shouldSwitch = true;
+            break;
+          }
+
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+      document.querySelector('#sort_learn_activity').innerHTML = '▼'
+    } else {
+      if (document.getElementById("search_fio").value == '' &&
+        document.getElementById("search_fakultet").value == '' &&
+        document.getElementById("search_year_start").value == '' &&
+        document.getElementById("search_year_end").value == '') {
+        console.log(studentsList);
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_learn_activity').innerHTML = 'ᐁ';
+      } else {
+        console.log(studentsList);
+        renderStudentsTable(studentsList);
+        document.querySelector('#sort_learn_activity').innerHTML = 'ᐁ';
+      }
+    }
+  }
+
+
+
+
+}
+
 
 // Этап 6. Создайте функцию фильтрации массива студентов и добавьте события для элементов формы.
+
+
+function search_func() {
+  let fio_input, fak_input, start_input, filter, table, tr, td, i;
+  fio_input = document.getElementById("search_fio");
+  filter_fio = fio_input.value.toUpperCase();
+
+  fak_input = document.getElementById("search_fakultet");
+  filter_fak = fak_input.value.toUpperCase();
+
+
+  start_input = document.getElementById("search_year_start");
+  filter_start = start_input.value;
+
+  end_input = document.getElementById("search_year_end");
+  filter_end = end_input.value;
+  const regular = /(\d{4})/gm;
+
+  table = document.getElementById("table_main");
+  tr = table.getElementsByTagName("tr");
+  for (i = 1; i < tr.length; i++) {
+    th_fio = tr[i].getElementsByTagName("th")[0];
+    td_fak = tr[i].getElementsByTagName("td")[0];
+    td_learn = tr[i].getElementsByTagName("td")[2];
+
+
+
+    if (th_fio && td_fak && td_learn) {
+      if (td_fak.innerHTML.toUpperCase().indexOf(filter_fak) > -1 &&
+        th_fio.innerHTML.toUpperCase().indexOf(filter_fio) > -1) {
+        if (filter_start == '' && filter_end == '') {
+          tr[i].style.display = "";
+        } else {
+          if (td_learn.innerHTML.match(regular)) {
+            if (filter_start != '' && filter_end != '') {
+              if (filter_start == td_learn.innerHTML.match(regular)[0] &&
+                filter_end == td_learn.innerHTML.match(regular)[1]) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            } else {
+              if (filter_start == td_learn.innerHTML.match(regular)[0] ||
+                filter_end == td_learn.innerHTML.match(regular)[1]) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+}
